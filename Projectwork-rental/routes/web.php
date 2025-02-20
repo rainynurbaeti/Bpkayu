@@ -1,18 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CarController;
+use App\Http\Controllers\RentalController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PageController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+Route::get('/', [CarController::class, 'index'])->name('home');
+Route::get('/tentangkami', [PageController::class, 'about'])->name('about');
+Route::get('/rental-mobil', [CarController::class, 'list'])->name('cars.index');
+Route::get('/galeri', [PageController::class, 'gallery'])->name('gallery');
+Route::get('/articles', [PageController::class, 'articles'])->name('artikel');
+Route::get('/kontak', [PageController::class, 'contact'])->name('contact');
+Route::post('/contact-submit', [ContactController::class, 'submit'])->name('contact.submit');
+Route::get('/booking', [CarController::class, 'booking'])->name('booking');
+Route::get('/search', [CarController::class, 'search'])->name('search');
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cars/{car}', [CarController::class, 'show'])->name('cars.show');
+    Route::post('/rent/{car}', [RentalController::class, 'store'])->name('rent.store');
 });
